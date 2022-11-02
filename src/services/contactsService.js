@@ -48,9 +48,11 @@ const addContact = async ({ name, email, phone }) => {
 
 const removeContact = async (contactId) => {
   try {
-    const indexContact = contactId - 1;
-
     const { response } = await listContacts();
+
+    const indexContact = response.findIndex(
+      (contact) => contact.id === contactId
+    );
 
     if (!response[indexContact]) {
       return { status: "404", response: "Not found" };
@@ -68,9 +70,11 @@ const removeContact = async (contactId) => {
 
 const updateContact = async (contactId, body) => {
   try {
-    const indexContact = contactId - 1;
-
     const { response } = await listContacts();
+
+    const indexContact = response.findIndex(
+      (contact) => contact.id === contactId
+    );
 
     if (!response[indexContact]) {
       return { status: "404", response: "Not found" };
