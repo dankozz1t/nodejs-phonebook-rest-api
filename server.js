@@ -1,16 +1,19 @@
 const app = require("./app");
+const mongoose = require("mongoose");
 
-const PORT = process.env.PORT || 8081;
+require("dotenv").config();
 
-const start = async () => {
-  try {
-    app.listen(PORT, (err) => {
-      if (err) console.error("Error at aserver launch:", err);
+const { MONGO_URL, PORT = 8081 } = process.env;
+
+mongoose
+  .connect(MONGO_URL)
+  .then(() => {
+    console.log("Database connection successful");
+    app.listen(PORT, () => {
       console.log(`Server running. Use our API on port: ${PORT}!  💨💨💨`);
     });
-  } catch (err) {
-    console.error(`Failed to launch application with error: ${err.message}`);
-  }
-};
-
-start();
+  })
+  .catch((err) => {
+    console.log(`Error with connect to database: ${err.message}`);
+    process.exit(1);
+  });

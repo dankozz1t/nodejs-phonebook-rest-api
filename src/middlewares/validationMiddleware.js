@@ -8,6 +8,7 @@ const contactBodyValidation = (req, res, next) => {
       .min(6)
       .pattern(/^[0-9]+$/)
       .required(),
+    favorite: Joi.boolean().required(),
   });
 
   const result = schema.validate(req.body);
@@ -21,4 +22,20 @@ const contactBodyValidation = (req, res, next) => {
   }
 };
 
-module.exports = { contactBodyValidation };
+const updateFavoriteValidation = (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
+  });
+
+  const result = schema.validate(req.body);
+  if (result.error) {
+    res.send({
+      status: "400",
+      response: result.error.details[0].message,
+    });
+  } else {
+    next();
+  }
+};
+
+module.exports = { contactBodyValidation, updateFavoriteValidation };
