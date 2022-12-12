@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const { userMethod } = require("../../repository");
-
 require("dotenv").config();
 
 const { JWT_SECRET_KEY } = process.env;
@@ -12,12 +11,15 @@ class AuthService {
   }
 
   async create(body) {
-    const { id, name, email, role } = await userMethod.createUser(body);
+    const { id, name, email, role, avatarURL } = await userMethod.createUser(
+      body
+    );
     return {
       id,
       name,
       email,
       role,
+      avatarURL,
     };
   }
 
