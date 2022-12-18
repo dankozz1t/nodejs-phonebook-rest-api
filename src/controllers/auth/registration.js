@@ -1,9 +1,10 @@
 const { HttpCode } = require("../../utils");
 const AuthService = require("../../service/auth");
 const authService = new AuthService();
+const { v4: uuidv4 } = require("uuid");
 
 const registration = async (req, res, next) => {
-  const { email } = req.body;
+  const { email, password } = req.body;
   const isUserExist = await authService.isUserExist(email);
 
   if (isUserExist) {
@@ -13,8 +14,8 @@ const registration = async (req, res, next) => {
       message: "Email is already exist",
     });
   }
-
-  const data = await authService.create(req.body);
+  const verificationToken = uuidv4();
+  const data = await authService.create({ email, password, verificationToken });
 
   res.status(HttpCode.OK).json({
     status: "success",
